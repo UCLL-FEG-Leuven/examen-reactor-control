@@ -1,20 +1,18 @@
-const reactorStatus = ["Stopped", "Running", "Meltdown"];
-// const getRandomArray = (maxInt) => {
-//   return Math.floor(Math.random() * maxInt);
-// };
 const getStatus = (x) => {
   switch (true) {
     case x >= 0 && x <= 150:
-      return "Sleep Mode";
+      return "Cooldown";
     case x >= 150 && x <= 830:
       return "Running";
     case x > 830:
       return "Meltdown";
   }
 };
+
 const getRandomTemperature = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
 export class Reactor {
   constructor(id, powergrid, temperature) {
     this._id = id;

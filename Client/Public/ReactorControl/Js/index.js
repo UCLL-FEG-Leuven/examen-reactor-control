@@ -1,1 +1,1 @@
-import { Reactor } from "../Shared/Modules/reactor.js";
+import { Reactor } from "./Modules/reactor.js";

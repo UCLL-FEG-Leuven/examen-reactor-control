@@ -1,6 +1,6 @@
 // #region IMPORTS / EXPRESS SETUP
 // ---------------------------------------
-import { Reactor } from "../Shared/Modules/reactor.js";
+import { Reactor } from "./Modules/reactor.js";
 import express from "express";
 const APP = express();
 const PORT = 2022;
