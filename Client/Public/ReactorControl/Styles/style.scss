@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+}
+
+:root {
+  --ucllPink: #e30147;
+  --ucllLightBlue: #9fdaf9;
+  --ucllDarkBlue: #002757;
+  --background: #404040;
+  --accent: #858585;
+  --textColor: #ffffff;
+  --lightGray: #dddddd;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--textColor);
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 30px;
+}
+hr {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+main {
+  flex-grow: 1;
+}
+h1 {
+  margin-top: 10px;
+}
+#scrollContainer {
+  height: 75vh;
+  overflow-y: auto;
+}
+
+#content {
+  display: flex;
+  flex-direction: row;
+}
+#img {
+  width: 180px;
+  margin-bottom: 10px;
+}
+#nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--ucllPink);
+  padding: 10px;
+  height: 98.4vh;
+}
+#title {
+  padding-left: 25px;
+}
+
+#iotData {
+  border-collapse: collapse;
+  width: 96%;
+  margin: 20px 200px 0px 20px;
+}
+
+#iotData td,
+#iotData th {
+  border: 1px solid var(--lightGray);
+  padding: 8px;
+  font-size: 20px;
+}
+
+#iotData tr:hover {
+  background-color: var(--ucllLightBlue);
+  color: var(--ucllDarkBlue);
+}
+
+#iotData th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: var(--ucllPink);
+  color: var(--textColor);
+}
+
+.bi-trash-fill {
+  cursor: pointer;
+}
+
+.btn {
+  background-color: var(--accent);
+  text-decoration: none;
+  color: var(--textColor);
+  border-radius: 5px;
+  padding: 4.5px 4px;
+  margin: 3px;
+  font-size: 8px;
+  cursor: pointer;
+  width: 160px;
+}
+a.btn {
+  font-size: 25px;
+  padding: 10px;
+}
+.bi {
+  margin-right: 5px;
+}

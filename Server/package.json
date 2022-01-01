@@ -1,0 +1,21 @@
+{
+  "name": "ucll-reactor-server",
+  "version": "1.0.0",
+  "description": "Examen Front End gevorderd",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "build",
+    "start": "node server.js"
+  },
+  
+  "keywords": [
+    "examen",
+    "node"
+  ],
+  "author": "Kenny-Lacroix & David Urting",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
