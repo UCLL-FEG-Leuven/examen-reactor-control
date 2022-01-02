@@ -104,9 +104,10 @@ const generateReactorHtml = (reactors) => {
         <p>Status: <b>${reactor._Status}</b></p>
         <p>Powergrid: <b>${reactor._PowerGrid}</b></p>
         <div class="testScenario">
-        <h2>Test scenario's</h2>
+            <h2>Control</h2>
             <i id="start${reactor._id}" class="fas fa-play"></i>
             <i id="stop${reactor._id}" class="fas fa-stop"></i>
+            <h2>Test scenario's</h2>
             <i id="meltdown${reactor._id}" class="fas fa-radiation"></i>
             <i id="cooldown${reactor._id}" class="fas fa-temperature-low"></i>
         </div>
@@ -118,12 +119,16 @@ const generateReactorHtml = (reactors) => {
 const addReactorListeners = (reactors) => {
   reactors.map((reactor, i) => {
     document.querySelector(`#start${reactor._id}`).addEventListener("click", () => {
-      reactor._Status = "Running";
-      putStatus(reactor);
+      if (reactor._Status !== "Meltdown") {
+        reactor._Status = "Running";
+        putStatus(reactor);
+      }
     });
     document.querySelector(`#stop${reactor._id}`).addEventListener("click", () => {
-      reactor._Status = "Stopped";
-      putStatus(reactor);
+      if (reactor._Status !== "Meltdown") {
+        reactor._Status = "Stopped";
+        putStatus(reactor);
+      }
     });
     document.querySelector(`#meltdown${reactor._id}`).addEventListener("click", () => {
       reactor._Status = "Meltdown";
