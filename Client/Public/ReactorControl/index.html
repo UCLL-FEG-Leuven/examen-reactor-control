@@ -6,21 +6,39 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="./Styles/style.css">
-  </link>
+  <link rel="stylesheet" href="./Styles/style.css" />
+  <script src="https://kit.fontawesome.com/2f0a3f8336.js" crossorigin="anonymous"></script>
   <title>Iot Dashboard</title>
 </head>
 
 <body>
+  <nav>
+    <div id="navTitle">
+      <img src="./Images/UCLLOrigineel.png" alt="UCLL LOGO">
+      <p>Reactor Control</p>
+    </div>
+    <a aria-label="Starter Github" target="_blank" rel="noopener" href="TBD" title="Github">
+      <img id="github" src="./Images/gitHub.png" alt="UCLL LOGO">
+    </a>
+  </nav>
+
   <div id="content">
-    <nav id="nav">
-      <img id="img" src="./Images/logo.svg" alt="ucll logo" />
-      <a id="HomeBtn" class="btn" href="#"><i class="bi bi-house-fill"></i> Home</a>
-      <a id="DataBtn" class="btn"><i class="bi bi-list-columns-reverse"></i> Data</a>
-      <a id="ControlBtn" class="btn"><i class="bi bi-wrench"></i> Control</a>
-    </nav>
-    <main>
-     
+    <aside id="info">
+      <h1>Diagnostics</h1>
+      <div id="diagnostics"></div>
+      <h1>Reactor Management</h1>
+      <div id="management">
+        <button id="createReactor">Add Reactor</button>
+        <button id="resetMeltdown">Reset Meltdown</button>
+      </div>
+      <h1>Temperature Unit</h1>
+      <div id="temperatureUnit">
+        <button id="unitCelcius">Celcius</button>
+        <button id="unitFahrenheit">Fahrenheit</button>
+        <button id="unitKelvin">Kelvin</button>
+      </div>
+    </aside>
+    <main id="reactors">
     </main>
   </div>
   <script type="module" src="./Js/index.js"></script>

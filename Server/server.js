@@ -28,11 +28,6 @@ const updateAllReactorTemperatures = (reactorData) => {
   });
 };
 
-//update One reactor (Cooldown button)
-const updateReactorTemperature = (reactor) => {
-  reactors[reactor._id].SetCooldown();
-};
-
 //update One reactor (scenario buttons)
 const updateReactorState = (reactor) => {
   reactors[reactor._id].UpdateState(reactor._Status);
@@ -68,16 +63,14 @@ APP.get("/reactors/get", (req, res) => {
 //Reset all statusses & temperatures from the reactors (Reset Meltdown)
 APP.put("/reactors/reset", (req, res) => {
   console.log("meltdown reset requested");
-  if (req.body.data == "Reset Meltdown") {
-    let response = {};
-    try {
-      resetReactorMeltdowns();
-      response = { status: "OK" };
-    } catch (error) {
-      response = { status: "NOK" };
-    }
-    return res.send(JSON.stringify(response));
+  let response = {};
+  try {
+    resetReactorMeltdowns();
+    response = { action: "Meltdown Reset", status: "OK" };
+  } catch (error) {
+    response = { action: "Meltdown Reset", status: "NOK" };
   }
+  return res.send(JSON.stringify(response));
 });
 
 //Update all statusses & temperatures from the reactors (RandomTemperature)
@@ -86,36 +79,22 @@ APP.put("/reactors/update/temperature", (req, res) => {
   let response = {};
   try {
     updateAllReactorTemperatures(req.body.data);
-    response = { status: "OK" };
+    response = { action: "Update All Temperatures", status: "OK" };
   } catch (error) {
-    response = { status: "NOK" };
-  }
-  return res.send(JSON.stringify(response));
-});
-
-//Update temperature from this reactor (coolTemperature button)
-APP.put("/reactor/update/temperature", (req, res) => {
-  console.log("reactor cooldown requested");
-  let response = {};
-  try {
-    updateReactorTemperature(req.body.data);
-    response = { status: "OK" };
-  } catch (error) {
-    console.log(error);
-    response = { status: "NOK" };
+    response = { action: "Update All Temperatures", status: "NOK" };
   }
   return res.send(JSON.stringify(response));
 });
 
 //Update status from this reactor (on/off/meltdown button)
 APP.put("/reactor/update/state", (req, res) => {
-  console.log("temperature update requested (test scenario's)");
+  console.log("state update requested (test scenario's)");
   let response = {};
   try {
     updateReactorState(req.body.data);
-    response = { status: "OK" };
+    response = { action: "Update Reactor State", status: "OK" };
   } catch (error) {
-    response = { status: "NOK" };
+    response = { action: "Update Reactor State", status: "NOK" };
   }
   return res.send(JSON.stringify(response));
 });
@@ -126,9 +105,9 @@ APP.post("/reactor/add", (req, res) => {
   let response = {};
   try {
     reactors.push(new Reactor(reactors.length));
-    response = { status: "OK" };
+    response = { action: "Create Reactor", status: "OK" };
   } catch (error) {
-    response = { status: "NOK" };
+    response = { action: "Create Reactor", status: "NOK" };
   }
   return res.send(JSON.stringify(response));
 });
