@@ -1,6 +1,8 @@
 const getStatus = (x) => {
   switch (true) {
-    case x >= 0 && x < 150:
+    case x < 30:
+      return "Stopped";
+    case x >= 30 && x < 150:
       return "Cooldown";
     case x >= 150 && x <= 830:
       return "Running";
@@ -33,13 +35,13 @@ export class Reactor {
         this._Temperature = 837;
         break;
       case "Stopped":
-        this._Temperature = 125;
+        this._Temperature = 5;
         break;
       case "Running":
         this._Temperature = 250;
         break;
       case "Cooldown":
-        this._Temperature = 10;
+        this._Temperature = 45;
         break;
     }
   }
