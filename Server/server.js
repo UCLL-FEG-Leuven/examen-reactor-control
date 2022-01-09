@@ -13,34 +13,10 @@ const PORT = 2022;
 const reactorAmount = 3;
 const reactors = [];
 
-//Default random reactors
-const createDefaultReactors = (amount) => {
-  for (let index = 0; index < amount; index++) {
-    reactors.push(new Reactor(index));
-  }
-};
-
-//updateAll (Random temperature increase or decrease)
-const updateAllReactorTemperatures = (reactorData) => {
-  reactors.length = 0;
-  reactorData.map((reactor, i) => {
-    reactors.push(new Reactor(i, reactor._Powergrid, reactor._Temperature));
-  });
-};
-
-//update One reactor (scenario buttons)
-const updateReactorState = (reactor) => {
-  reactors[reactor._id].UpdateState(reactor._Status);
-};
-
-//Reset after meltdown
-const resetReactorMeltdowns = () => {
-  reactors.map((reactor) => {
-    reactor.ResetMeltdown();
-  });
-};
-
-createDefaultReactors(reactorAmount);
+for (let index = 0; index < reactorAmount; index++) {
+  reactors.push(new Reactor(index));
+}
+console.log("Reactors created:");
 console.log(reactors);
 
 // ---------------------------------------
@@ -50,22 +26,28 @@ console.log(reactors);
 // ---------------------------------------
 
 /* ---ACTIVATE MIDDLEWARE--- */
-APP.use("/reactor", express.static("../Client/Public/ReactorControl"));
+// De Reactor Control is bereikbaar op twee url's
+APP.use("/", express.static("../Client/Public/ReactorControl"));
+APP.use("/reactor-control", express.static("../Client/Public/ReactorControl"));
 APP.use(express.json());
 
 /* ---ENDPOINTS--- */
-//return all the reactors
-APP.get("/reactors/get", (req, res) => {
-  console.log("reactors requested");
+// HTTP GET to /api/reactor: return all the reactors.
+APP.get("/api/reactor", (req, res) => {
+  console.log("HTTP GET received: reactors requested");
   res.send(JSON.stringify(reactors));
 });
 
-//Reset all statusses & temperatures from the reactors (Reset Meltdown)
-APP.put("/reactors/reset", (req, res) => {
-  console.log("meltdown reset requested");
+// HTTP POST to /api/reactor: reset all reactor statusses & temperatures after a meltdown.
+APP.post("/api/reset", (req, res) => {
+  console.log("HTTP POST received: reset requested");
   let response = {};
-  try {
-    resetReactorMeltdowns();
+  try {    
+    // Alle reactors resetten
+    reactors.forEach((reactor) => {
+      reactor.reset();
+    });
+
     response = { action: "Meltdown Reset", status: "OK" };
   } catch (error) {
     response = { action: "Meltdown Reset", status: "NOK" };
@@ -73,25 +55,14 @@ APP.put("/reactors/reset", (req, res) => {
   return res.send(JSON.stringify(response));
 });
 
-//Update all statusses & temperatures from the reactors (RandomTemperature)
-APP.put("/reactors/update/temperature", (req, res) => {
-  console.log("Temperature update requested");
+// HTTP PUT to /api/reactor: update status from this reactor (on/off/cooldown/meltdown button)
+APP.put("/api/reactor", (req, res) => {
+  console.log("HTTP PUT received: state update requested");
   let response = {};
   try {
-    updateAllReactorTemperatures(req.body.data);
-    response = { action: "Update All Temperatures", status: "OK" };
-  } catch (error) {
-    response = { action: "Update All Temperatures", status: "NOK" };
-  }
-  return res.send(JSON.stringify(response));
-});
+    // Reactor status bijwerken
+    reactors[req.body.data._id].updateState(req.body.data._status);
 
-//Update status from this reactor (on/off/meltdown button)
-APP.put("/reactor/update/state", (req, res) => {
-  console.log("state update requested (test scenario's)");
-  let response = {};
-  try {
-    updateReactorState(req.body.data);
     response = { action: "Update Reactor State", status: "OK" };
   } catch (error) {
     response = { action: "Update Reactor State", status: "NOK" };
@@ -99,12 +70,14 @@ APP.put("/reactor/update/state", (req, res) => {
   return res.send(JSON.stringify(response));
 });
 
-//Add new reactor and generate random values
-APP.post("/reactor/add", (req, res) => {
-  console.log("reactor creation requested");
+//HTTP POST to /api/reactor: add new reactor and generate random values
+APP.post("/api/reactor", (req, res) => {
+  console.log("HTTP POST received: reactor creation requested");
   let response = {};
   try {
+    // Reactor aanmaken en toevoegen aan lijst van reactors.
     reactors.push(new Reactor(reactors.length));
+    
     response = { action: "Create Reactor", status: "OK" };
   } catch (error) {
     response = { action: "Create Reactor", status: "NOK" };
@@ -114,7 +87,7 @@ APP.post("/reactor/add", (req, res) => {
 
 /* ---START SERVER--- */
 APP.listen(PORT, () => {
-  console.log(`Reactor Control app running at http://localhost:${PORT}/reactor`);
+  console.log(`Reactor Control app running at http://localhost:${PORT} (and http://localhost:${PORT}/reactor-control).\nAjax calls can be sent to http://localhost:${PORT}/api/...`);
 });
 
 // ---------------------------------------
