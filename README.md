@@ -11,3 +11,5 @@ Of je kan ook volgende stappen uitvoeren:
 3. ````node server.js```
 
 Na het starten is de Reactor Control app bereikbaar op http://localhost:2022/reactor
+
+Veel succes!
