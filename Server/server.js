@@ -27,24 +27,25 @@ console.log(reactors);
 // ---------------------------------------
 
 /* ---ACTIVATE MIDDLEWARE--- */
-// De Reactor Control
+// De Reactor Control is bereikbaar op twee url's
 APP.use("/", express.static("../Client/Public/ReactorControl"));
+APP.use("/reactor-control", express.static("../Client/Public/ReactorControl"));
 APP.use(express.json());
 
 /* ---ENDPOINTS--- */
 
-// Return all the reactors
+// HTTP GET to /api/reactor: return all the reactors.
 APP.get("/api/reactor", (req, res) => {
   console.log("HTTP GET received: reactors requested");
   res.send(JSON.stringify(reactors));
 });
 
-// Reset all reactor statusses & temperatures 
+// HTTP POST to /api/reactor: reset all reactor statusses & temperatures after a meltdown.
 APP.post("/api/meltdownreset", (req, res) => {
   console.log("HTTP POST received: meltdown reset requested");
   let response = {};
   try {
-
+    // Alle reactors resetten
     reactors.forEach((reactor) => {
       reactor.resetMeltdown();
     });
@@ -59,7 +60,7 @@ APP.post("/api/meltdownreset", (req, res) => {
 
 /* ---START SERVER--- */
 APP.listen(PORT, () => {
-  console.log(`Reactor Control app running at http://localhost:${PORT}.\nAPI for ajax calls available at http://localhost:${PORT}/api.`);
+  console.log(`Reactor Control app running at http://localhost:${PORT} (and http://localhost:${PORT}/reactor-control).\nAjax calls can be sent to http://localhost:${PORT}/api/...`);
 });
 
 // ---------------------------------------
