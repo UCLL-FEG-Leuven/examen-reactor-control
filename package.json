@@ -1,0 +1,13 @@
+{
+  "name": "ucll-reactor",
+  "version": "1.0.0",
+  "description": "Examen Front End gevorderd",
+  "scripts": {
+    "start": "cd server & npm run start"
+  },
+  "keywords": [
+    "examen"
+  ],
+  "author": "Kenny-Lacroix & David Urting",
+  "license": "UNLICENSED"
+}

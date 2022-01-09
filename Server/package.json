@@ -1,14 +1,13 @@
 {
   "name": "ucll-reactor-server",
   "version": "1.0.0",
-  "description": "Examen Front End gevorderd",
+  "description": "Examen Front End gevorderd (server/backend)",
   "type": "module",
   "main": "server.js",
   "scripts": {
     "test": "build",
-    "start": "node server.js"
+    "start": "npm install & nodemon server.js"
   },
-  
   "keywords": [
     "examen",
     "node"
@@ -17,5 +16,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

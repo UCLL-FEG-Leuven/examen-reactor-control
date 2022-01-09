@@ -114,7 +114,7 @@ APP.post("/reactor/add", (req, res) => {
 
 /* ---START SERVER--- */
 APP.listen(PORT, () => {
-  console.log(`App running at http://localhost:${PORT}`);
+  console.log(`Reactor Control app running at http://localhost:${PORT}/reactor`);
 });
 
 // ---------------------------------------
