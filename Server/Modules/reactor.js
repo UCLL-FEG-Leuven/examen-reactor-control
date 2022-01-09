@@ -15,6 +15,10 @@ const getRandomTemperature = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+// Objecten van deze class stellen de reactoren voor.
+// Bij het aanmaken van een reactor zal deze elke seconde zijn temperatuur en mogelijks zijn status bijwerken.
+// Hiervoor wordt gebruik gemaakt van setInterval();
+// Deze class wordt enkel gebruikt door de backend.
 export class Reactor {
   constructor(id, powergrid, temperature) {
     this._id = id;
@@ -27,8 +31,12 @@ export class Reactor {
     }, 1000)
   }
 
+  // Deze methode wordt elke seconde uitgevoerd (door de setInterval() die in de constructor werd aangeroepen).
+  // Een reactor werkt zijn temperatuur/status dus autonoom bij.
+  // De nieuwe temperatuur wordt 'willekeurig' berekend, waarbij er 50% kans is dat de temperatuur zakt en
+  // 50% kans is dat de temperatuur stijgt. 
   _randomlyChangeTemperature() {
-    if (this._status === "Running") {
+    if (this._status === "Cooldown" || this._status === "Running") {
       let temperatureDirection;
       let newTemperature, newState;
       let max = 50;
@@ -45,27 +53,10 @@ export class Reactor {
     }
   }
 
+  // Deze methode wordt aangeroepen wanneer de front end een HTTP POST stuurt naar /api/resetmeltdown.
+  // De reactor krijgt dan terug een veilige temperatuur en wordt in de Running status gezet.
   resetMeltdown() {
     this._status = "Running";
     this._temperature = getRandomTemperature(300, 500);
-  }
-
-  updateStatus(status) {
-    if (this._status)
-    this._status = status;
-    switch (this._status) {
-      case "Meltdown":
-        this._temperature = 837;
-        break;
-      case "Stopped":
-        this._temperature = 5;
-        break;
-      case "Running":
-        this._temperature = getRandomTemperature(300, 500);
-        break;
-      case "Cooldown":
-        this._temperature = 45;
-        break;
-    }
   }
 }

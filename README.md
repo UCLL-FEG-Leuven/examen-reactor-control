@@ -10,6 +10,7 @@ Of je kan ook volgende stappen uitvoeren:
 2. ```npm install```
 3. ````node server.js```
 
-Na het starten is de Reactor Control app bereikbaar op http://localhost:2022/reactor
+Na het starten is de Reactor Control app bereikbaar op http://localhost:2022
+AJAX calls kan je sturen naar http://localhost:2022/api (zie server.js)
 
 Veel succes!
