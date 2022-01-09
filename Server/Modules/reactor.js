@@ -18,7 +18,7 @@ const getRandomTemperature = (min, max) => {
 export class Reactor {
   constructor(id, powergrid, temperature) {
     this._id = id;
-    this._temperature = temperature || getRandomTemperature(15, 1000);
+    this._temperature = temperature || getRandomTemperature(250, 350);
     this._status = getStatus(this._temperature);
     this._powerGrid = powergrid || Math.floor(id / 3) + 1;
 
@@ -61,7 +61,7 @@ export class Reactor {
         this._temperature = 5;
         break;
       case "Running":
-        this._temperature = 250;
+        this._temperature = 300;
         break;
       case "Cooldown":
         this._temperature = 45;

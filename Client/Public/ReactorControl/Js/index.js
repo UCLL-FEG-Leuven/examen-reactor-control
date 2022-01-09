@@ -88,7 +88,7 @@ const generateReactorHtml = (reactors) => {
         <p>Temperature: <b>${convertTemperature(reactor._temperature)}°${temperatureUnit}</b></p>
         <p>Status: <b>${reactor._status}</b></p>
         <p>Powergrid: <b>${reactor._powerGrid}</b></p>
-        <div class="testScenario">
+        <div class="reactorControl">
             <h2>Control</h2>
             <i id="start${reactor._id}" class="fas fa-play"></i>
             <i id="stop${reactor._id}" class="fas fa-stop"></i>
