@@ -3,7 +3,7 @@ let temperatureUnit = "C";
 // #region Ajax
 // ---------------------------------------
 const postReactor = () => {
-  fetch("http://localhost:2022/reactor/add", {
+  fetch("http://localhost:2022/api/reactor", {
     method: "POST",
   })
     .then((response) => response.json())
@@ -14,7 +14,7 @@ const postReactor = () => {
 };
 const putStatus = (reactor) => {
   let obj = { data: reactor };
-  fetch("http://localhost:2022/reactor/status", {
+  fetch("http://localhost:2022/api/reactor", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -27,9 +27,9 @@ const putStatus = (reactor) => {
       getReactors();
     });
 };
-const putMeltdownReset = () => {
-  fetch("http://localhost:2022/reactors/reset", {
-    method: "PUT",
+const postMeltdownReset = () => {
+  fetch("http://localhost:2022/api/meltdownreset", {
+    method: "POST",
   })
     .then((response) => response.json())
     .then((data) => {
@@ -38,7 +38,7 @@ const putMeltdownReset = () => {
     });
 };
 const getReactors = async () => {
-  let res = await fetch("http://localhost:2022/reactors/get");
+  let res = await fetch("http://localhost:2022/api/reactor");
   let data = await res.json();
   //   console.log("reactors: ", data);
   generateDiagnostics(data);
@@ -56,7 +56,7 @@ const reactorManagementListeners = () => {
   });
 
   document.querySelector("#resetMeltdown").addEventListener("click", () => {
-    putMeltdownReset();
+    postMeltdownReset();
   });
 };
 const tempConversionListeners = () => {
@@ -120,8 +120,10 @@ const addReactorListeners = (reactors) => {
       putStatus(reactor);
     });
     document.querySelector(`#cooldown${reactor._id}`).addEventListener("click", () => {
-      reactor._status = "Cooldown";
-      putStatus(reactor);
+      if (reactor._status !== "Meltdown") {
+        reactor._status = "Cooldown";
+        putStatus(reactor);
+      }
     });
   });
 };

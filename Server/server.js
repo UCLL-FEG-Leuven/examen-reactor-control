@@ -23,7 +23,7 @@ const createDefaultReactors = (amount) => {
 
 //update One reactor (scenario buttons)
 const updateReactorStatus = (reactor) => {
-  reactors[reactor._id].updateStatus(reactor._Status);
+  reactors[reactor._id].updateStatus(reactor._status);
 };
 
 //Reset after meltdown
@@ -49,27 +49,14 @@ APP.use(express.json());
 
 /* ---ENDPOINTS--- */
 //return all the reactors
-APP.get("/reactors/get", (req, res) => {
+APP.get("/api/reactor", (req, res) => {
   console.log("HTTP GET received: reactors requested");
   res.send(JSON.stringify(reactors));
 });
 
-//Reset all statusses & temperatures from the reactors (Reset Meltdown)
-APP.put("/reactors/reset", (req, res) => {
-  console.log("meltdown reset requested");
-  let response = {};
-  try {
-    resetReactorMeltdowns();
-    response = { action: "Meltdown Reset", status: "OK" };
-  } catch (error) {
-    response = { action: "Meltdown Reset", status: "NOK" };
-  }
-  return res.send(JSON.stringify(response));
-});
-
 //Update status from this reactor (on/off/meltdown button)
-APP.put("/reactor/status", (req, res) => {
-  console.log("status update requested");
+APP.put("/api/reactor", (req, res) => {
+  console.log("HTTP PUT received: update (status of) reactor");
   let response = {};
   try {
     updateReactorStatus(req.body.data);
@@ -81,14 +68,27 @@ APP.put("/reactor/status", (req, res) => {
 });
 
 //Add new reactor and generate random values
-APP.post("/reactor/add", (req, res) => {
-  console.log("reactor creation requested");
+APP.post("/api/reactor", (req, res) => {
+  console.log("HTTP POST received: reactor creation requested");
   let response = {};
   try {
     reactors.push(new Reactor(reactors.length));
     response = { action: "Create Reactor", status: "OK" };
   } catch (error) {
     response = { action: "Create Reactor", status: "NOK" };
+  }
+  return res.send(JSON.stringify(response));
+});
+
+//Reset all reactor statusses & temperatures 
+APP.post("/api/meltdownreset", (req, res) => {
+  console.log("HTTP POST received: meltdown reset requested");
+  let response = {};
+  try {
+    resetReactorMeltdowns();
+    response = { action: "Meltdown Reset", status: "OK" };
+  } catch (error) {
+    response = { action: "Meltdown Reset", status: "NOK" };
   }
   return res.send(JSON.stringify(response));
 });
