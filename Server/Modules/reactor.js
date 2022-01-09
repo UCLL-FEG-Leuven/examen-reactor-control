@@ -18,30 +18,53 @@ const getRandomTemperature = (min, max) => {
 export class Reactor {
   constructor(id, powergrid, temperature) {
     this._id = id;
-    this._Temperature = temperature || getRandomTemperature(15, 1000);
-    this._Status = getStatus(this._Temperature);
-    this._PowerGrid = powergrid || Math.floor(id / 3) + 1;
+    this._temperature = temperature || getRandomTemperature(15, 1000);
+    this._status = getStatus(this._temperature);
+    this._powerGrid = powergrid || Math.floor(id / 3) + 1;
+
+    setInterval(() => {
+      this._randomlyChangeTemperature();
+    }, 1000)
   }
 
-  ResetMeltdown() {
-    this._Status = "Running";
-    this._Temperature = 400;
+  _randomlyChangeTemperature() {
+    if (this._status === "Running") {
+      let temperatureDirection;
+      let newTemperature, newState;
+      let max = 50;
+      let min = 1;
+      temperatureDirection = Math.round(Math.random());
+      let temperatureChange = Math.floor(Math.random() * (max - min + 1)) + min;
+      temperatureDirection == 0 ? (newTemperature = this._temperature - temperatureChange) : (newTemperature = this._temperature + temperatureChange);
+      if (newTemperature <= 0) newTemperature = 0;
+      newState = getStatus(newTemperature);
+
+      console.log(`(internal) 'Running' reactor ${this._id} is updating its temperature from ${this._temperature} to ${newTemperature}. New status is '${newState}'.`); 
+      this._temperature = newTemperature;
+      this._status = newState;
+    }
   }
 
-  UpdateState(state) {
-    this._Status = state;
-    switch (this._Status) {
+  resetMeltdown() {
+    this._status = "Running";
+    this._temperature = 400;
+  }
+
+  updateStatus(status) {
+    if (this._status)
+    this._status = status;
+    switch (this._status) {
       case "Meltdown":
-        this._Temperature = 837;
+        this._temperature = 837;
         break;
       case "Stopped":
-        this._Temperature = 5;
+        this._temperature = 5;
         break;
       case "Running":
-        this._Temperature = 250;
+        this._temperature = 250;
         break;
       case "Cooldown":
-        this._Temperature = 45;
+        this._temperature = 45;
         break;
     }
   }
