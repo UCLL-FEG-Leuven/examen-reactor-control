@@ -41,13 +41,13 @@ APP.get("/api/reactor", (req, res) => {
 });
 
 // HTTP POST to /api/reactor: reset all reactor statusses & temperatures after a meltdown.
-APP.post("/api/meltdownreset", (req, res) => {
-  console.log("HTTP POST received: meltdown reset requested");
+APP.post("/api/reset", (req, res) => {
+  console.log("HTTP POST received: reset requested");
   let response = {};
   try {
     // Alle reactors resetten
     reactors.forEach((reactor) => {
-      reactor.resetMeltdown();
+      reactor.reset();
     });
 
     response = { action: "Meltdown Reset", status: "OK" };

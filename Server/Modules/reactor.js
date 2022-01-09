@@ -55,9 +55,9 @@ export class Reactor {
     }
   }
 
-  // Deze methode wordt aangeroepen wanneer de front end een HTTP POST stuurt naar /api/resetmeltdown.
+  // Deze methode wordt aangeroepen wanneer de front end een HTTP POST stuurt naar /api/reset.
   // De reactor krijgt dan terug een veilige temperatuur en wordt in de Running status gezet.
-  resetMeltdown() {
+  reset() {
     this._status = "Running";
     this._temperature = getRandomTemperature(300, 500);
   }
