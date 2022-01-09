@@ -62,8 +62,8 @@ export class Reactor {
     this._temperature = getRandomTemperature(300, 500);
   }
 
-  updateState(state) {
-    this._status = state;
+  updateState(status) {
+    this._status = status;
     switch (this._status) {
       case "Meltdown":
         this._temperature = 837;

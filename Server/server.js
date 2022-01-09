@@ -18,6 +18,7 @@ for (let index = 0; index < reactorAmount; index++) {
 }
 console.log("Reactors created:");
 console.log(reactors);
+// setInterval(updateAllReactorTemperaturesRandomly, 1000);
 
 // ---------------------------------------
 // #endregion
@@ -65,7 +66,7 @@ APP.put("/api/reactor", (req, res) => {
 
     response = { action: "Update Reactor State", status: "OK" };
   } catch (error) {
-    response = { action: "Update Reactor State", status: "NOK" };
+    response = { action: "Create Reactor", status: "NOK" };
   }
   return res.send(JSON.stringify(response));
 });
@@ -80,7 +81,7 @@ APP.post("/api/reactor", (req, res) => {
     
     response = { action: "Create Reactor", status: "OK" };
   } catch (error) {
-    response = { action: "Create Reactor", status: "NOK" };
+    response = { action: "Meltdown Reset", status: "NOK" };
   }
   return res.send(JSON.stringify(response));
 });

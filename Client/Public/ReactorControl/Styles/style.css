@@ -104,29 +104,29 @@ main img {
   width: 100%;
 }
 
-.testScenario {
+.reactorControl {
   margin-top: 10px;
 }
 
-.testScenario h2 {
+.reactorControl h2 {
   margin-top: 10px;
 }
 
-.testScenario .fas {
+.reactorControl .fas {
   margin-left: 5px;
   font-size: 25px;
   cursor: pointer;
 }
 
-.testScenario .fa-stop {
+.reactorControl .fa-stop {
   color: #ff2e2e;
 }
 
-.testScenario .fa-radiation {
+.reactorControl .fa-radiation {
   color: #99cc33;
 }
 
-.testScenario .fa-temperature-low {
+.reactorControl .fa-temperature-low {
   color: #7affff;
 }
 
