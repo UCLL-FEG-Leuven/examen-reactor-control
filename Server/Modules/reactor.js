@@ -47,9 +47,11 @@ export class Reactor {
       if (newTemperature <= 0) newTemperature = 0;
       newState = getStatus(newTemperature);
 
-      console.log(`(internal) 'Running' reactor ${this._id} is updating its temperature from ${this._temperature} to ${newTemperature}. New status is '${newState}'.`); 
+      console.log(`(internal) Reactor ${this._id} is updating its temperature from ${this._temperature} to ${newTemperature}. New status is '${newState}'.`); 
       this._temperature = newTemperature;
       this._status = newState;
+    } else {
+      console.log(`(internal) Reactor ${this._id} is in status '${this._status}'. Temperature will not change.`); 
     }
   }
 
