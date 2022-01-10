@@ -1,8 +1,6 @@
 const getStatus = (x) => {
   switch (true) {
-    case x < 30:
-      return "Stopped";
-    case x >= 30 && x < 150:
+    case x < 150:
       return "Cooldown";
     case x >= 150 && x <= 830:
       return "Running";
@@ -28,15 +26,15 @@ export class Reactor {
 
     setInterval(() => {
       this._randomlyChangeTemperature();
-    }, 1000)
+    }, 1000);
   }
 
   // Deze methode wordt elke seconde uitgevoerd (door de setInterval() die in de constructor werd aangeroepen).
   // Een reactor werkt zijn temperatuur/status dus autonoom bij.
   // De nieuwe temperatuur wordt 'willekeurig' berekend, waarbij er 50% kans is dat de temperatuur zakt en
-  // 50% kans is dat de temperatuur stijgt. 
+  // 50% kans is dat de temperatuur stijgt.
   _randomlyChangeTemperature() {
-    if (this._status === "Cooldown" || this._status === "Running") {
+    if (this._status === "Running") {
       let temperatureDirection;
       let newTemperature, newState;
       let max = 50;
@@ -47,11 +45,11 @@ export class Reactor {
       if (newTemperature <= 0) newTemperature = 0;
       newState = getStatus(newTemperature);
 
-      console.log(`(internal) Reactor ${this._id} is updating its temperature from ${this._temperature} to ${newTemperature}. New status is '${newState}'.`); 
+      console.log(`(internal) Reactor ${this._id} is updating its temperature from ${this._temperature} to ${newTemperature}. New status is '${newState}'.`);
       this._temperature = newTemperature;
       this._status = newState;
     } else {
-      console.log(`(internal) Reactor ${this._id} is in status '${this._status}'. Temperature will not change.`); 
+      console.log(`(internal) Reactor ${this._id} is in status '${this._status}'. Temperature will not change.`);
     }
   }
 
@@ -69,7 +67,7 @@ export class Reactor {
         this._temperature = 837;
         break;
       case "Stopped":
-        this._temperature = 5;
+        this._temperature = 0;
         break;
       case "Running":
         this._temperature = getRandomTemperature(300, 500);
