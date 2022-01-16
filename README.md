@@ -1,6 +1,6 @@
 # Examen front end gevorderd (MGP04a) - 17/01/2022 - Reactor Control
 De UCLL Reactor Control web applicatie: een dashboard voor visualisatie en controle van een fictieve kerncentrale.  
-Zie **Examen Reactor.docx** voor alle functionele en technische vereisten.
+Zie **Examen_Reactor_Control.docx** voor alle functionele en technische vereisten.
 
 # Hoe starten?
 Voer het volgende uit op een terminal/command prompt:  
