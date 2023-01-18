@@ -1,64 +1,28 @@
+import { Reactor } from "./Modules/reactor.js";
+import { Diagnostics } from "./Modules/diagnostics.js";
+
 let temperatureUnit = "C";
 
-// #region Ajax
-// ---------------------------------------
-const postReactor = () => {
-  fetch("/api/reactor", {
-    method: "POST",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      getReactors();
-    });
-};
-const putStatus = (reactor) => {
-  let obj = { data: reactor };
-  fetch("/api/reactor", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      getReactors();
-    });
-};
-const postReset = () => {
-  fetch("/api/reset", {
-    method: "POST",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      getReactors();
-    });
-};
 const getReactors = async () => {
-  let res = await fetch("/api/reactor");
-  let data = await res.json();
-  //   console.log("reactors: ", data);
-  generateDiagnostics(data);
-  generateReactorHtml(data);
-  return data;
+  let reactors = await Reactor.getReactors();
+  Diagnostics.generateDiagnosticsWidget(diagnosticsHtmlElement, reactors, temperatureUnit);
+  generateReactorHtml(reactors);
 };
-// ---------------------------------------
-// #endregion
 
-// #region Main
+// #region Widget interface
 // ---------------------------------------
 const reactorManagementListeners = () => {
-  document.querySelector("#createReactor").addEventListener("click", () => {
-    postReactor();
+  document.querySelector("#createReactor").addEventListener("click", async () => {
+    await Reactor.createReactor();
+    getReactors();
   });
 
-  document.querySelector("#resetMeltdown").addEventListener("click", () => {
-    postReset();
+  document.querySelector("#resetMeltdown").addEventListener("click", async () => {
+    await Reactor.resetReactors();
+    getReactors();
   });
 };
+
 const tempConversionListeners = () => {
   document.querySelector("#unitCelcius").addEventListener("click", () => {
     temperatureUnit = "C";
@@ -79,103 +43,55 @@ const tempConversionListeners = () => {
 // #region Reactor interface
 // ---------------------------------------
 const generateReactorHtml = (reactors) => {
-  let htmlString = "";
-  reactors.map((reactor, i) => {
-    htmlString += /* html */ `
-      <div class="reactor">
-        <h1>Reactor: ${reactor._id}</h1>
-        <img src="./Images/reactor${reactor._status}.png" alt="reactor ${reactor._status}">
-        <p>Temperature: <b>${convertTemperature(reactor._temperature)}°${temperatureUnit}</b></p>
-        <p>Status: <b>${reactor._status}</b></p>
-        <p>Powergrid: <b>${reactor._powerGrid}</b></p>
-        <div class="reactorControl">
-            <h2>Control</h2>
-            <i id="start${reactor._id}" class="fas fa-play"></i>
-            <i id="stop${reactor._id}" class="fas fa-stop"></i>
-            <h2>Test scenario's</h2>
-            <i id="meltdown${reactor._id}" class="fas fa-radiation"></i>
-            <i id="cooldown${reactor._id}" class="fas fa-temperature-low"></i>
-        </div>
-      </div>`;
+  reactorHtmlElement.innerHTML = "";
+  reactors.map((reactor) => {
+    reactor.render(temperatureUnit, reactorHtmlElement);
   });
-  document.querySelector("#reactors").innerHTML = htmlString;
   addReactorListeners(reactors);
 };
+
 const addReactorListeners = (reactors) => {
-  reactors.map((reactor, i) => {
-    document.querySelector(`#start${reactor._id}`).addEventListener("click", () => {
+  reactors.map((reactor) => {
+    document.querySelector(`#start${reactor._id}`).addEventListener("click", async () => {
       if (reactor._status !== "Meltdown") {
         reactor._status = "Running";
-        putStatus(reactor);
+        await Reactor.updateReactorState(reactor);
+        getReactors();
       }
     });
-    document.querySelector(`#stop${reactor._id}`).addEventListener("click", () => {
+
+    document.querySelector(`#stop${reactor._id}`).addEventListener("click", async () => {
       if (reactor._status !== "Meltdown") {
         reactor._status = "Stopped";
-        putStatus(reactor);
+        await Reactor.updateReactorState(reactor);
+        getReactors();
       }
     });
-    document.querySelector(`#meltdown${reactor._id}`).addEventListener("click", () => {
+
+    document.querySelector(`#meltdown${reactor._id}`).addEventListener("click", async () => {
       reactor._status = "Meltdown";
-      putStatus(reactor);
-    });    
-    document.querySelector(`#cooldown${reactor._id}`).addEventListener("click", () => {
+      await Reactor.updateReactorState(reactor);
+      getReactors();
+    });
+
+    document.querySelector(`#cooldown${reactor._id}`).addEventListener("click", async () => {
       if (reactor._status !== "Meltdown") {
         reactor._status = "Cooldown";
-        putStatus(reactor);
+        await Reactor.updateReactorState(reactor);
+        getReactors();
       }
     });
   });
-};
-// ---------------------------------------
-// #endregion
-
-// #region Diagnostics
-// ---------------------------------------
-const generateDiagnostics = (reactors) => {
-  let averageTemp = 0;
-  let status = "Operational";
-  reactors.map((reactor, i) => {
-    averageTemp += reactor._temperature;
-    if (reactor._status == "Meltdown") {
-      status = "Meltdown";
-    }
-  });
-  averageTemp = averageTemp / reactors.length;
-
-  generateDiagnosticsHtml(averageTemp, status);
-};
-const generateDiagnosticsHtml = (temp, status) => {
-  let htmlString = /* html */ `
-    <p>Average temperature: <b>${convertTemperature(temp)}°${temperatureUnit}</b></p>
-    <p>Alert status: <b>${status}</b></p>
-    <p>Temperature Unit: <b>°${temperatureUnit}</b></p>
-  `;
-  document.querySelector("#diagnostics").innerHTML = htmlString;
-};
-// ---------------------------------------
-// #endregion
-
-// #region Temperature
-// ---------------------------------------
-const convertTemperature = (temperature) => {
-  let temp = temperature;
-  switch (temperatureUnit) {
-    case "F":
-      temp = (temperature * (9 / 5) + 32).toFixed(2);
-      return temp;
-    case "K":
-      temp = (temperature + 273.15).toFixed(2);
-      return temp;
-    default:
-      return temp.toFixed(2);
-  }
 };
 // ---------------------------------------
 // #endregion
 
 // #region MainCode
 // ---------------------------------------
+
+const diagnosticsHtmlElement = document.querySelector("#diagnostics");
+const reactorHtmlElement = document.querySelector("#reactors");
+
 reactorManagementListeners();
 tempConversionListeners();
 getReactors();
