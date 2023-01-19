@@ -6,13 +6,13 @@ export class Diagnostics {
     static generateDiagnosticsWidget(htmlElement, reactors, temperatureUnit) {
         let diagnosticData = this._generateDiagnosticsData(reactors);
         let htmlString = /* html */ `
-            <p>Average temperature: <b>${this._convertTemperature(diagnosticData.temperature)}°${temperatureUnit}</b></p>
+            <p>Average temperature: <b>${this._convertTemperature(diagnosticData.temperature, temperatureUnit)}°${temperatureUnit}</b></p>
             <p>Alert status: <b>${diagnosticData.status}</b></p>
             <p>Temperature Unit: <b>°${temperatureUnit}</b></p>`;
         htmlElement.innerHTML = htmlString;
     }
 
-    static _convertTemperature(temperature) {
+    static _convertTemperature(temperature, temperatureUnit) {
         let temp = temperature;
         switch (temperatureUnit) {
             case "F":

@@ -12,7 +12,7 @@ export class Reactor {
       <div class="reactor">
         <h1>Reactor: ${this._id}</h1>
         <img src="./Images/reactor${this._status}.png" alt="reactor ${this._status}">
-        <p>Temperature: <b>${this._convertTemperature(this._temperature)}°${temperatureUnit}</b></p>
+        <p>Temperature: <b>${this._convertTemperature(this._temperature, temperatureUnit)}°${temperatureUnit}</b></p>
         <p>Status: <b>${this._status}</b></p>
         <p>Powergrid: <b>${this._powerGrid}</b></p>
         <div class="reactorControl">
@@ -28,7 +28,7 @@ export class Reactor {
 
   }
 
-  _convertTemperature(temperature) {
+  _convertTemperature(temperature, temperatureUnit) {
     let temp = temperature;
     switch (temperatureUnit) {
       case "F":
