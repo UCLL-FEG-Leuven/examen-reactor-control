@@ -43,18 +43,28 @@ export class Reactor {
   };
   static async getReactors() {
     let res = await fetch("/api/reactor");
-    let data = await res.json();
-    let reactors = data.map((reactor) => new Reactor(reactor._id, reactor._temperature, reactor._status, reactor._powerGrid))
-    return reactors;
+    if (res.ok) {
+      let data = await res.json();
+      let reactors = data.map((reactor) => new Reactor(reactor._id, reactor._temperature, reactor._status, reactor._powerGrid))
+      return reactors;
+    }
+    else {
+      console.log('get reactors request failed')
+    }
   }
 
   static async createReactor() {
     let res = await fetch("/api/reactor", {
       method: "POST",
     });
-    let data = await res.json();
-    if (data.status == "OK") {
-      console.log(data);
+    if (res.ok) {
+      let data = await res.json();
+      if (data.status == "OK") {
+        console.log(data);
+      }
+    }
+    else {
+      console.log('create reactor request failed')
     }
   }
 
@@ -62,9 +72,14 @@ export class Reactor {
     let res = await fetch("/api/reset", {
       method: "POST",
     });
-    let data = await res.json();
-    if (data.status == "OK") {
-      console.log(data);
+    if (res.ok) {
+      let data = await res.json();
+      if (data.status == "OK") {
+        console.log(data);
+      }
+    }
+    else {
+      console.log('reset reactor request failed')
     }
   }
 
@@ -77,9 +92,14 @@ export class Reactor {
       },
       body: JSON.stringify(obj),
     });
-    let data = await res.json();
-    if (data.status == "OK") {
-      console.log(data);
+    if (res.ok) {
+      let data = await res.json();
+      if (data.status == "OK") {
+        console.log(data);
+      }
+    }
+    else {
+      console.log('update reactor request failed')
     }
   }
 }
